@@ -12,8 +12,17 @@ class User < ActiveRecord::Base
     [first_name, last_name].join(' ')
   end
 
-  def mood
-    @user = User.mood
+  def self.by_mood(mood)
+    where(mood: mood)
+  end
+
+  def create
+    @user = User.new(params[:id])
+      if @user.save
+        redirect_to user_path
+      else
+        render :new
+      end
   end
 
 end

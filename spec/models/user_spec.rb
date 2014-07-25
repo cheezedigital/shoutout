@@ -12,22 +12,18 @@ RSpec.describe User, :type => :model do
       it { should validate_presence_of :mood }
     end
 
-    describe '.by_first_name' do
+    describe '.by_mood', :focus do
       before do
-        create(:user, first_name: 'Justin', last_name: 'Veirs' )
-        create(:user, first_name: 'Jimmy', last_name: 'Veirs' )
+        create(:user, first_name: 'Jusitn', mood: 'happy' )
+        create(:user, first_name: 'Jason', mood: 'sad' )
+        create(:user, first_name: 'Johnny', mood: 'thirsty' )
+        create(:user, first_name: 'Jimmy', mood: 'drunk' )
       end
-    end
-
-    describe '.mood', :focus do
-      before do
-        create(:user, first_name: 'Jusitn', last_name: 'Veirs', mood: 'happy' )
-        create(:user, first_name: 'Justin', last_name: 'Veirs', mood: 'sad' )
-        create(:user, first_name: 'Justin', last_name: 'Veirs', mood: 'thirsty' )
-        create(:user, first_name: 'Justin', last_name: 'Veirs', mood: 'drunk' )
+      it 'returns 1 user' do
+        expect(User.by_mood('happy').count).to eq 1
       end
-      it 'returns mood when user finds mood' do
-        expect(User.mood('sad')).to be_mood
+      it 'should not include justin' do
+        expect(User.by_mood('sad')).to_not include 'Justin'
       end
     end
 
